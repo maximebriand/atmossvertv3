@@ -179,32 +179,34 @@ app-comparison-slider {
     overflow: hidden;
 }
 
-.flex {
-    width: 80vw;
-    margin: 5vh auto;
-    // background: linear-gradient(180deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
-    display: flex;
-    position: relative;
-    &>div {
-        position: sticky;
-        overflow: hidden;
-        top: 9vh;
-        height: 80vh;
-        margin-left: 15px;
-        width: calc(30vw - 15px);
+.liste-projets li {
+    padding: 5vh 0;
+    .flex {
+        width: 80vw;
+        margin: auto;
         display: flex;
-        flex-direction: column;
-        h1 {
-            transform: translate3d(500px, 0px, 0px);
-            visibility: hidden;
-        }
-        p {
-            transform: translate3d(0px, 200px, 0px);
-            visibility: hidden;
-        }
-        a {
-            transform: translate3d(500px, 0px, 0px);
-            margin-top: auto;
+        position: relative;
+        &>div {
+            position: sticky;
+            overflow: hidden;
+            top: 9vh;
+            height: 80vh;
+            margin-left: 15px;
+            width: calc(30vw - 15px);
+            display: flex;
+            flex-direction: column;
+            h1 {
+                transform: translate3d(500px, 0px, 0px);
+                visibility: hidden;
+            }
+            p {
+                transform: translate3d(0px, 200px, 0px);
+                visibility: hidden;
+            }
+            a {
+                transform: translate3d(500px, 0px, 0px);
+                margin-top: auto;
+            }
         }
     }
 }

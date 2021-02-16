@@ -14,9 +14,7 @@ export default {
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
-    css: [
-        '~/assets/styles.scss'
-    ],
+    css: ['~/assets/styles.scss'],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [],
@@ -30,16 +28,33 @@ export default {
         '@nuxt/typescript-build',
         // https://go.nuxtjs.dev/tailwindcss
         '@nuxtjs/tailwindcss',
-        'nuxt-gsap'
+        'nuxt-gsap',
     ],
 
     nuxtGsap: {
-        imports: ['Back', 'Circ'] // Specify the gsap modules you want to import. By default, gsap & Linear are loaded
+        imports: ['Back', 'Circ'], // Specify the gsap modules you want to import. By default, gsap & Linear are loaded
+    },
+    env: {
+        imgUrl: 'http://localhost:1337'
+    },
+    publicRuntimeConfig: {
+        axios: {
+            baseURL: 'http://localhost:3000'
+        }
+    },
+    // Modules: https://go.nuxtjs.dev/config-modules
+    modules: [
+        ['@nuxtjs/axios']
+    ],
+    axios: {
+        debug: true,
+        proxy: true
     },
 
-    // Modules: https://go.nuxtjs.dev/config-modules
-    modules: [],
-
+    proxy: {
+        '/api/': { target: 'http://localhost:1337', pathRewrite: { '^/api/': '' } }
+    },
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
+    // router: { base: '/atmossvert' }
 }

@@ -21,29 +21,35 @@
       </div>
     </section>
     <ul class="liste-projets">
-      <HomepageProjet
-        v-for="(item, index) in projets"
-        :key="index"
-        :data="[item, projets[index + 1]]"
-      />
-      <!-- <li v-for="projet of projets">
-      </li> -->
+      <li v-for="(projet, index) of projets" :key="projet.id">
+        <HomepageProjet
+          :projet="projet"
+          :bkg_color="
+            projets[index + 1] ? projets[index + 1].background_color : null
+          "
+        />
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
 import { gsap } from 'gsap'
-import ScrollToPlugin from 'gsap/ScrollToPlugin'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import imagesLoaded from 'imagesloaded'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 gsap.registerPlugin(ScrollToPlugin)
-export const projets = ['green', 'orange', 'yellow', 'deeppurple']
+// export const projets = ['#736F5D', '#BFBCAA', '#D9CEC5', '#59514F']
 
 export default {
-  data() {
+  // data() {
+  //   return { projets }
+  // },
+
+  async asyncData({ $axios, $config }) {
+    const projets = await $axios.$get(`api/projets`)
     return { projets }
   },
   mounted() {
@@ -72,11 +78,26 @@ export default {
           },
         },
       })
-
       document.body.style.overflow = 'auto'
       document.scrollingElement.scrollTo(0, 0)
+      setBackground()
       // Hide loader
       gsap.to(document.querySelector('.loader'), { autoAlpha: 0 })
+    }
+
+    const setBackground = () => {
+      let colors = ''
+      for (let projet of this.projets) {
+        if (this.projets.length - 1 !== this.projets.indexOf(projet)) {
+          colors += `${JSON.parse(projet.background_color).hex} ${100/ this.projets.length * (this.projets.indexOf(projet) + 1) * 0.8}% ,`
+        } else {
+          colors += `${JSON.parse(projet.background_color).hex }`
+        }
+      }
+
+      document.querySelector(
+        '.liste-projets'
+      ).style.background = `linear-gradient(${colors})`
     }
     // showDemo();
     imagesLoaded(images).on('progress', updateProgress).on('always', showDemo)
@@ -85,12 +106,6 @@ export default {
 </script>
 
 <style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-@apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
-
 .container {
   margin: 0 auto;
   min-height: 100vh;

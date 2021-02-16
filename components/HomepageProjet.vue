@@ -1,19 +1,24 @@
 <template>
   <div class="flex flex-1">
-    <section class="comparisonContainer">
+    <section class="comparison'.liste-projets'">
       <section class="comparisonSection">
         <div class="comparisonImage beforeImage">
-          <img src="https://picsum.photos/id/1/1200/900" alt="before" />
+          <img
+            :src="imgUrl + projet.image_avant.formats.large.url"
+            alt="before"
+          />
         </div>
         <div class="comparisonImage afterImage">
-          <img src="https://picsum.photos/id/2/1200/900" alt="after" />
+          <img
+            :src="imgUrl + projet.image_apres.formats.large.url"
+            alt="after"
+          />
         </div>
       </section>
     </section>
     <div class="test">
-      <h1>Titre du projet</h1>
-      <p>Super projet par Marvin Laurand</p>
-      {{ data }}
+      <h1>{{ projet.titre }}</h1>
+      <p>{{ projet.description }}</p>
       <a href="">Voir le projet</a>
     </div>
   </div>
@@ -21,21 +26,23 @@
 
 <script>
 import { gsap } from 'gsap'
-import ScrollToPlugin from 'gsap/ScrollToPlugin'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 gsap.registerPlugin(ScrollToPlugin)
 export default {
-  props: ['data'],
+  props: ['projet', 'bkg_color'],
+  data() {
+    return { imgUrl: process.env.imgUrl }
+  },
   mounted() {
-    console.log(this.data);
     const section = this.$el.querySelector('section.comparisonSection')
     const titre = this.$el.querySelector('.test h1')
     const soustitre = this.$el.querySelector('.test p')
     const lienBtn = this.$el.querySelector('.test a')
 
-    let tl = gsap.timeline({
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: 'center center',
@@ -47,18 +54,8 @@ export default {
       },
       defaults: { ease: 'none' },
     })
-    // tl.to('body', 0.2, {
-    //   backgroundColor: this.data
-    // })
-    tl.fromTo('body', 0.2, 
-    {
-      backgroundColor: this.data[0]
-    },
-    {
-      backgroundColor: this.data[1]
-    }
-    )
-    // animate the container one way...
+
+    // animate the '.liste-projets' one way...
     tl.fromTo(
       section.querySelector('.afterImage'),
       { xPercent: 100, x: 0 },
@@ -71,9 +68,10 @@ export default {
         { xPercent: 0 },
         0
       )
-    tl.to(titre, 0.5, { x: 0, autoAlpha: 1, ease: 'power2.out' }, 0)
-    tl.to(soustitre, 0.8, { y: 0, autoAlpha: 1, ease: 'power2.out' }, 0)
-    tl.to(lienBtn, 1, { x: 0, ease: 'power2.out' }, 0)
+
+      .to(titre, 0.5, { x: 0, autoAlpha: 1, ease: 'power2.out' }, 0)
+      .to(soustitre, 0.8, { y: 0, autoAlpha: 1, ease: 'power2.out' }, 0)
+      .to(lienBtn, 1, { x: 0, ease: 'power2.out' }, 0)
   },
 }
 </script>
