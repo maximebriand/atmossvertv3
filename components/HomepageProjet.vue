@@ -1,25 +1,20 @@
 <template>
-  <div class="flex flex-1">
+  <div class="projet content">
     <section class="comparison'.liste-projets'">
       <section class="comparisonSection">
         <div class="comparisonImage beforeImage">
-          <img
-            :src="imgUrl + projet.image_avant.formats.large.url"
-            alt="before"
-          />
+          <img :src="imageBefore" alt="before" />
         </div>
         <div class="comparisonImage afterImage">
-          <img
-            :src="imgUrl + projet.image_apres.formats.large.url"
-            alt="after"
-          />
+          <img :src="imageAfter" alt="after" />
         </div>
       </section>
     </section>
-    <div class="test">
-      <h1>{{ projet.titre }}</h1>
-      <p>{{ projet.description }}</p>
-      <a href="">Voir le projet</a>
+    <div class="projet_content">
+      <h1>{{ projet.title.rendered }}</h1>
+      <div v-html="projet.excerpt.rendered"></div>
+      <a class="button" href="">Voir le projet</a>
+    </div>
     </div>
   </div>
 </template>
@@ -34,13 +29,29 @@ gsap.registerPlugin(ScrollToPlugin)
 export default {
   props: ['projet', 'bkg_color'],
   data() {
-    return { imgUrl: process.env.imgUrl }
+    return {
+      imageBefore: '',
+      imageAfter: '',
+    }
   },
+  async fetch() {
+    await this.$axios
+      .$get('api/media/' + this.projet.img_before)
+      .then((img) => {
+        this.imageBefore = img.media_details.sizes.large.source_url
+      })
+    await this.$axios
+      .$get('api/media/' + this.projet.img_after)
+      .then(
+        (img) => (this.imageAfter = img.media_details.sizes.large.source_url)
+      )
+  },
+  fetchOnServer: false,
   mounted() {
     const section = this.$el.querySelector('section.comparisonSection')
-    const titre = this.$el.querySelector('.test h1')
-    const soustitre = this.$el.querySelector('.test p')
-    const lienBtn = this.$el.querySelector('.test a')
+    const titre = this.$el.querySelector('.projet_content h1')
+    const soustitre = this.$el.querySelector('.projet_content div')
+    const lienBtn = this.$el.querySelector('.projet_content a')
 
     const tl = gsap.timeline({
       scrollTrigger: {

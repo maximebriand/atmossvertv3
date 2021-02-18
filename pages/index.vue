@@ -13,7 +13,7 @@
         <h1>
           <span class="hidetext">Atmoss'vert</span>
         </h1>
-        <h1>
+        <h1 class="subtext">
           <span class="hidetext idee">une idée,</span>
           <span class="hidetext reve">un rêve,</span>
           <span class="hidetext createur">un créateur</span>
@@ -41,18 +41,28 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 gsap.registerPlugin(ScrollToPlugin)
-// export const projets = ['#736F5D', '#BFBCAA', '#D9CEC5', '#59514F']
 
 export default {
-  // data() {
-  //   return { projets }
-  // },
-
   async asyncData({ $axios, $config }) {
-    const projets = await $axios.$get(`api/projets`)
+    const projets = await $axios.$get(`api/chantiers?_embed`)
     return { projets }
   },
   mounted() {
+    const subtext = document.querySelectorAll('.subtext span')
+    const subtextWidth =
+      subtext[2].getBoundingClientRect().right -
+      subtext[0].getBoundingClientRect().left
+    subtext[0].style.left = `${
+      document.querySelector('h1:first-child span').getBoundingClientRect().x -
+      (subtextWidth -
+        document.querySelector('h1:first-child span').offsetWidth) /
+        2
+    }px`
+    for (let i = 1; i < subtext.length; i++) {
+      subtext[i].style.left = `${
+        subtext[i - 1].getBoundingClientRect().right
+      }px`
+    }
     const images = gsap.utils.toArray('img')
     const loader = document.querySelector('.loader--text')
     const updateProgress = (instance) =>
@@ -66,7 +76,7 @@ export default {
           trigger: document.querySelector('.hero'),
           onEnter: () => {
             tlHeader.to(h1, {
-              delay: 0.4,
+              delay: 0.8,
               duration: 0.8,
               y: -200,
               rotation: 0,
@@ -78,27 +88,56 @@ export default {
           },
         },
       })
+      const imgHero = document.querySelectorAll('.hero img')
+      tlHeader
+        .from(imgHero, {
+          delay: 0.2,
+          opacity: 0.4,
+          duration: 0.8,
+          rotation: -50,
+          scaleX: 10,
+          scaleY: 10,
+          transformOrigin: 'center center',
+        })
+        .fromTo(
+          document.querySelector('.hero img'),
+          {
+            y: '5vh',
+          },
+          {
+            y: 0,
+            ease: 'none',
+          }
+        )
       document.body.style.overflow = 'auto'
       document.scrollingElement.scrollTo(0, 0)
-      setBackground()
+      // setBackground()
       // Hide loader
       gsap.to(document.querySelector('.loader'), { autoAlpha: 0 })
     }
 
-    const setBackground = () => {
-      let colors = ''
-      for (let projet of this.projets) {
-        if (this.projets.length - 1 !== this.projets.indexOf(projet)) {
-          colors += `${JSON.parse(projet.background_color).hex} ${100/ this.projets.length * (this.projets.indexOf(projet) + 1) * 0.8}% ,`
-        } else {
-          colors += `${JSON.parse(projet.background_color).hex }`
-        }
-      }
+    // const setBackground = () => {
+    //   let colors = ''
+    //   for (let projet of this.projets) {
+    //     if (this.projets.length - 1 !== this.projets.indexOf(projet)) {
+    //       // colors += `${projet.background_color} ${
+    //       //   (100 / this.projets.length) *
+    //       //   (this.projets.indexOf(projet) + 1) *
+    //       //   0.8
+    //       // }% ,`
+    //       colors += `${projet.background_color} ${
+    //         (100 / (this.projets.length - this.projets.indexOf(projet)))
+    //       }% ,`
+    //     } else {
+    //       colors += `${projet.background_color}`
+    //     }
+    //   }
 
-      document.querySelector(
-        '.liste-projets'
-      ).style.background = `linear-gradient(${colors})`
-    }
+    //   document.querySelector(
+    //     '.liste-projets'
+    //   ).style.background = `linear-gradient(${colors})`
+    // }
+
     // showDemo();
     imagesLoaded(images).on('progress', updateProgress).on('always', showDemo)
   },

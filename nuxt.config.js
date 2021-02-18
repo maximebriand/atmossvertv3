@@ -47,14 +47,14 @@ export default {
         ['@nuxtjs/axios']
     ],
     axios: {
-        debug: true,
+        // debug: strue,
         proxy: true
     },
 
     proxy: {
-        '/api/': { target: 'http://localhost:1337', pathRewrite: { '^/api/': '' } }
+        '/api/': { target: 'http://api.atmossvert.fr/wp-json/wp/v2/', pathRewrite: { '^/api/': '' } }
     },
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
-    // router: { base: '/atmossvert' }
+    router: { base: '/atmossvert' }
 }

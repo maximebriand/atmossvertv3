@@ -2,6 +2,12 @@
 
 @import "./sass/header";
 @import "./sass/footer";
+.content {
+    width: 80vw;
+    max-width: 1600px;
+    margin: auto;
+}
+
 section.hero {
     position: relative;
     img {
@@ -18,9 +24,15 @@ section.hero {
         margin: 0;
         position: relative;
         overflow: hidden;
+        left: 0;
+        right: 0;
+        &:first-child span {
+            left: 50%;
+            transform: translate(-50%, 0) rotate(20deg);
+        }
         span {
             position: absolute;
-            top: 175px;
+            top: 220px;
             transform: rotate(20deg);
             transform-origin: "bottom 50%";
             &.reve {
@@ -86,6 +98,8 @@ body {
 
 h1 {
     font-size: 3rem;
+    line-height: 3rem;
+    margin-bottom: 1rem;
 }
 
 h2 {
@@ -106,7 +120,7 @@ ul {
 
 li {
     flex-shrink: 0;
-    width: clamp(50px, 30vw, 800px);
+    // width: clamp(50px, 30vw, 800px);
     padding-right: 1rem;
 }
 
@@ -181,8 +195,7 @@ app-comparison-slider {
 
 .liste-projets li {
     padding: 5vh 0;
-    .flex {
-        width: 80vw;
+    .projet {
         margin: auto;
         display: flex;
         position: relative;
@@ -199,7 +212,7 @@ app-comparison-slider {
                 transform: translate3d(500px, 0px, 0px);
                 visibility: hidden;
             }
-            p {
+            div {
                 transform: translate3d(0px, 200px, 0px);
                 visibility: hidden;
             }
@@ -245,4 +258,11 @@ app-comparison-slider {
     height: 100%;
     position: absolute;
     top: 0;
+}
+
+.button {
+    background-color: #a98f56;
+    color: white;
+    width: fit-content;
+    padding: 15px 30px;
 }
